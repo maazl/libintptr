@@ -1,0 +1,18 @@
+int_ptr() -> null
+TestObj(1)::TestObj()
+int_ptr(T*) -> 1 [1]
+TestObj(2)::TestObj()
+int_ptr(int_ptr<T>&&) -> 2 [1]
+int_ptr(const int_ptr<T>&) -> 2 [2]
+TestObj(1)::~TestObj()
+operator=(const int_ptr<T>&) -> 2 [3]
+TestObj(3)::TestObj()
+operator=(int_ptr<T>&&) -> 3 [1]
+operator=(T*) -> 3 [2]
+operator=(self) -> 2 [1]
+swap(int_ptr<T>&&) -> 3 [2]
+reset() -> null
+toCptr() -> null
+fromCptr(T*) -> 2 [1]
+TestObj(2)::~TestObj()
+TestObj(3)::~TestObj()

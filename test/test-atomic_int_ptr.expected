@@ -1,0 +1,26 @@
+atomic_int_ptr() -> null
+TestObj(1)::TestObj()
+int_ptr(T*) -> 1 [1]
+atomic_int_ptr(const int_ptr<T>&) -> 1 [3]
+TestObj(2)::TestObj()
+atomic_int_ptr(int_ptr<T>&&) -> 2 [2]
+swap(atomic_int_ptr<T>&, int_ptr<T>&) -> 1 [3]
+swap(int_ptr<T>&, atomic_int_ptr<T>&) -> 2 [2]
+TestObj(2)::~TestObj()
+reset() -> null
+operator=(const int_ptr<T>&) -> 1 [4]
+operator=(self) -> 1 [4]
+TestObj(3)::TestObj()
+operator=(int_ptr<T>&&) -> 3 [2]
+TestObj(4)::TestObj()
+TestObj(1)::~TestObj()
+TestObj(4)::~TestObj()
+compare_exchange_strong() -> 3 [3]
+ oldval -> 3 [2]
+ result 0
+TestObj(5)::TestObj()
+compare_exchange_strong() -> 5 [2]
+ oldval -> 3 [1]
+ result 1
+TestObj(3)::~TestObj()
+TestObj(5)::~TestObj()
