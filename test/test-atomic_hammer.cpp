@@ -13,15 +13,19 @@ static auto test_time = 3s;
 struct logger
 {
 #ifndef NDEBUG
+	static atomic<unsigned long> sum;
 	unsigned long value = 0;
 	logger() : value(0) {}
 	void operator++() { ++value; }
-	void print(const char* task, int id) { printf("%s %i: count %lu\n", task, id, value); }
+	void print(const char* task, int id) { sum += value; printf("%s %i: count %lu\n", task, id, value); }
 #else
 	void operator++() {}
 	void print(const char*, int) {}
 #endif
 };
+#ifndef NDEBUG
+atomic<unsigned long> logger::sum;
+#endif
 
 struct Obj : public ref_count
 { int I;
@@ -92,7 +96,9 @@ int main()
 		threads[id].join();
 
 	#ifndef NDEBUG
-	printf ("max_outer_count: %u\n", atomic_int_ptr_base::max_outer_count.load());
+	printf ("max_outer_count: %u\n"
+		"total transaction: %lu\n",
+		atomic_int_ptr_base::max_outer_count.load(), logger::sum.load());
 	#endif
 
 	return 0;
