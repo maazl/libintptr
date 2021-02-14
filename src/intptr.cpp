@@ -7,7 +7,8 @@ std::atomic<unsigned> atomic_int_ptr_base::max_outer_count(1);
 #endif
 
 ref_count* atomic_int_ptr_base::acquire() const noexcept
-{	uintptr_t old_outer = ++ptr;
+{	__builtin_prefetch(reinterpret_cast<ref_count*>(ptr & int_ptr_base::pointer_mask), 1);
+	uintptr_t old_outer = ++ptr;
 	const uintptr_t outer_count = old_outer & int_ptr_base::counter_mask;
 	assert(outer_count != 0); // overflow condition
 	ref_count* const new_outer = reinterpret_cast<ref_count*>(old_outer & int_ptr_base::pointer_mask);
